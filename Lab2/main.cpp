@@ -44,7 +44,7 @@ std::string bin_sum(std::string num1_s, std::string num2_s,
             continue;
         }
         tmp = (num1_s[i] + num2_s[i] + carry) - 96;
-        carry = tmp / 2;
+        carry = tmp >> 1;
         res += std::to_string(tmp % 2);
         if (is_print) {
             std::cout << res << std::endl;
@@ -136,7 +136,7 @@ void inc(std::string &num_s) {
     for (size_t i = 0; i < num_s.size(); i++) {
         tmp = num_s[i] - '0' + carry;
         num_s[i] = tmp % 2 + '0';
-        carry = tmp / 2;
+        carry = tmp >> 1;
     }
     if (carry == 1) {
         num_s += '1';
@@ -281,7 +281,7 @@ std::string conv(std::string num_s) {
     for (auto &x : num_s) {
         tmp = x - '0' + carry;
         x = tmp % 2 + '0';
-        carry = tmp / 2;
+        carry = tmp >> 1;
     }
     std::reverse(num_s.begin(), num_s.end());
     return num_s;
