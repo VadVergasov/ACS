@@ -1,2 +1,7 @@
 .vscode/
+.vs/
+Debug/
+Release/
+*.filters
+*.user
 *.exe
