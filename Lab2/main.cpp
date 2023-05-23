@@ -4,8 +4,7 @@
 #include <iostream>
 #include <sstream>
 
-std::string bin_diff(std::string num1_s, std::string num2_s,
-                     bool is_print = false) {
+std::string bin_diff(std::string num1_s, std::string num2_s, bool is_print = false) {
     std::string res;
     int carry = 0, tmp;
     std::reverse(num1_s.begin(), num1_s.end());
@@ -32,8 +31,7 @@ std::string bin_diff(std::string num1_s, std::string num2_s,
     return res;
 }
 
-std::string bin_sum(std::string num1_s, std::string num2_s,
-                    bool is_print = false) {
+std::string bin_sum(std::string num1_s, std::string num2_s, bool is_print = false) {
     std::string res;
     int carry = 0, tmp;
     std::reverse(num1_s.begin(), num1_s.end());
@@ -59,8 +57,7 @@ std::string bin_sum(std::string num1_s, std::string num2_s,
     return res;
 }
 
-std::string bin_mul(std::string num1_s, std::string num2_s,
-                    bool is_print = false) {
+std::string bin_mul(std::string num1_s, std::string num2_s, bool is_print = false) {
     std::string res, tmp_res, null_string(num1_s.size() * 2, '0');
     res = null_string;
     if (num1_s[0] == '0' && num2_s[0] == '1') {
@@ -130,7 +127,7 @@ std::string bin_div(std::string num1_s, std::string M, bool is_print = false) {
     return Q;
 }
 
-void inc(std::string &num_s) {
+void inc(std::string& num_s) {
     int carry = 1, tmp;
     std::reverse(num_s.begin(), num_s.end());
     for (size_t i = 0; i < num_s.size(); i++) {
@@ -144,10 +141,10 @@ void inc(std::string &num_s) {
     std::reverse(num_s.begin(), num_s.end());
 }
 
-void dec(std::string &num_s) {
+void dec(std::string& num_s) {
     int carry = 1, tmp;
     std::reverse(num_s.begin(), num_s.end());
-    for (auto &x : num_s) {
+    for (auto& x : num_s) {
         tmp = x - '0' - carry;
         if (tmp < 0) {
             carry = 1;
@@ -203,8 +200,7 @@ std::string dec_to_bin(std::string num_s) {
     if (num_s[0] == '-') {
         num_s.erase(0, 1);
     }
-    size_t pos = std::distance(num_s.begin(),
-                               std::find(num_s.begin(), num_s.end(), '.'));
+    size_t pos = std::distance(num_s.begin(), std::find(num_s.begin(), num_s.end(), '.'));
     if (pos == num_s.size()) {
         std::string res = int_part_to_bin(num_s);
         res = res + "." + std::string(24 - res.size(), '0');
@@ -222,18 +218,14 @@ std::string dec_to_bin(std::string num_s) {
 }
 
 std::string bin_to_float(std::string bin) {
-    int pos =
-            std::distance(bin.begin(), std::find(bin.begin(), bin.end(), '.')),
-        exp;
+    int pos = std::distance(bin.begin(), std::find(bin.begin(), bin.end(), '.')), exp;
     std::string exp_s, mant, res;
     if (pos == 1) {
         if (bin[0] == '0') {
-            pos -= std::distance(bin.begin(),
-                                 std::find(bin.begin(), bin.end(), '1'));
+            pos -= std::distance(bin.begin(), std::find(bin.begin(), bin.end(), '1'));
             exp = 127 + pos;
             exp_s = std::bitset<8>(exp).to_string();
-            pos = std::distance(bin.begin(),
-                                std::find(bin.begin(), bin.end(), '1'));
+            pos = std::distance(bin.begin(), std::find(bin.begin(), bin.end(), '1'));
             bin.erase(pos, 1);
             mant = bin.substr(pos - 1);
         } else {
@@ -273,12 +265,13 @@ std::string dec_to_float(std::string num_s) {
 
 std::string conv(std::string num_s) {
     int carry = 1, tmp;
-    for (auto &x : num_s) {
-        if (x != '.') x = ((x - '0') ^ 1) + '0';
+    for (auto& x : num_s) {
+        if (x != '.')
+            x = ((x - '0') ^ 1) + '0';
         std::cout << x << ' ';
     }
     std::reverse(num_s.begin(), num_s.end());
-    for (auto &x : num_s) {
+    for (auto& x : num_s) {
         tmp = x - '0' + carry;
         x = tmp % 2 + '0';
         carry = tmp >> 1;
@@ -290,8 +283,8 @@ std::string conv(std::string num_s) {
 std::string float_sum(std::string num1_s, std::string num2_s);
 
 std::string float_diff(std::string num1_s, std::string num2_s) {
-    std::string exp1 = num1_s.substr(1, 8), exp2 = num2_s.substr(1, 8),
-                mant1 = num1_s.substr(9), mant2 = num2_s.substr(9);
+    std::string exp1 = num1_s.substr(1, 8), exp2 = num2_s.substr(1, 8), mant1 = num1_s.substr(9),
+                mant2 = num2_s.substr(9);
     std::string mant;
     char sign_bit = 0;
     if (num1_s[0] != num2_s[0]) {
@@ -365,8 +358,8 @@ std::string float_sum(std::string num1_s, std::string num2_s) {
         result[0] = ((num2_s[0] - '0') ^ 1) + '0';
         return result;
     }
-    std::string exp1 = num1_s.substr(1, 8), exp2 = num2_s.substr(1, 8),
-                mant1 = num1_s.substr(9), mant2 = num2_s.substr(9);
+    std::string exp1 = num1_s.substr(1, 8), exp2 = num2_s.substr(1, 8), mant1 = num1_s.substr(9),
+                mant2 = num2_s.substr(9);
     std::string mant;
     if (num1_s.find('1') == std::string::npos) {
         return num2_s;
@@ -418,8 +411,7 @@ std::string float_sum(std::string num1_s, std::string num2_s) {
 }
 
 std::string float_mul(std::string num1_s, std::string num2_s) {
-    std::string exp1 = '0' + num1_s.substr(1, 8),
-                exp2 = '0' + num2_s.substr(1, 8), mant1 = num1_s.substr(9),
+    std::string exp1 = '0' + num1_s.substr(1, 8), exp2 = '0' + num2_s.substr(1, 8), mant1 = num1_s.substr(9),
                 mant2 = num2_s.substr(9);
     char sign_bit = ((num1_s[0] - '0') ^ (num2_s[0] - '0')) + '0';
     std::string mant, exp;
@@ -436,8 +428,7 @@ std::string float_mul(std::string num1_s, std::string num2_s) {
         exp = bin_diff(exp, std::bitset<8>(127).to_string());
     }
     mant = bin_mul(mant1, mant2);
-    int pos = mant.find('1'), size1 = mant1.size() - mant1.find('1') - 1,
-        size2 = mant2.size() - mant2.find('1') - 1,
+    int pos = mant.find('1'), size1 = mant1.size() - mant1.find('1') - 1, size2 = mant2.size() - mant2.find('1') - 1,
         size = mant.size() - mant.find('1') - 1;
     if (size > size1 + size2) {
         for (int i = 0; i < size - size1 - size2; i++) {
@@ -463,8 +454,7 @@ std::string float_mul(std::string num1_s, std::string num2_s) {
 }
 
 std::string float_div(std::string num1_s, std::string num2_s) {
-    std::string exp1 = '0' + num1_s.substr(1, 8),
-                exp2 = '0' + num2_s.substr(1, 8), mant1 = num1_s.substr(9),
+    std::string exp1 = '0' + num1_s.substr(1, 8), exp2 = '0' + num2_s.substr(1, 8), mant1 = num1_s.substr(9),
                 mant2 = num2_s.substr(9);
     std::string exp, mant;
     char sign_bit = ((num1_s[0] - '0') ^ (num2_s[0] - '0')) + '0';
@@ -477,9 +467,11 @@ std::string float_div(std::string num1_s, std::string num2_s) {
     exp.erase(0, 1);
     int pos = mant.find('1');
     if (pos < static_cast<int>(mant.size()) - 1 - pres) {
-        for (size_t i = 0; i < mant.size() - 1 - pres - pos; i++) inc(exp);
+        for (size_t i = 0; i < mant.size() - 1 - pres - pos; i++)
+            inc(exp);
     } else {
-        for (size_t i = 0; i < pos - (mant.size() - 1 - pres); i++) dec(exp);
+        for (size_t i = 0; i < pos - (mant.size() - 1 - pres); i++)
+            dec(exp);
     }
     mant.erase(0, pos);
     if (mant.size() > 24) {
@@ -514,18 +506,15 @@ int main() {
     std::cin >> num2;
     std::cout << "\n";
     print_float(dec_to_float(num1));
-    std::cout << " - first num float\n"
-              << float_to_dec(dec_to_float(num1)) << " - first num in dec\n\n";
+    std::cout << " - first num float\n" << float_to_dec(dec_to_float(num1)) << " - first num in dec\n\n";
     print_float(dec_to_float(num2));
-    std::cout << " - second num float\n"
-              << float_to_dec(dec_to_float(num2)) << " - second num in dec\n\n";
+    std::cout << " - second num float\n" << float_to_dec(dec_to_float(num2)) << " - second num in dec\n\n";
     sum = float_sum(dec_to_float(num1), dec_to_float(num2));
     print_float(sum);
     std::cout << " - sum float\n" << float_to_dec(sum) << " - sum in dec\n\n";
     diff = float_diff(dec_to_float(num1), dec_to_float(num2));
     print_float(diff);
-    std::cout << " - diff float\n"
-              << float_to_dec(diff) << " - diff in dec\n\n";
+    std::cout << " - diff float\n" << float_to_dec(diff) << " - diff in dec\n\n";
     mul = float_mul(dec_to_float(num1), dec_to_float(num2));
     print_float(mul);
     std::cout << " - mul float\n" << float_to_dec(mul) << " - mul in dec\n\n";
