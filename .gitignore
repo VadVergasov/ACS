@@ -7,3 +7,5 @@ Release/
 *.exe
 *.ilk
 *.pdb
+*.obj
+*.map
