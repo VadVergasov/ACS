@@ -58,6 +58,23 @@ void matrixMultiplication(const thrust::device_vector<float>& A, const thrust::d
         thrust::raw_pointer_cast(A.data()), thrust::raw_pointer_cast(B.data()), thrust::raw_pointer_cast(C.data()), N);
 }
 
+void printProgress(double progress) {
+    static int barWidth = 70;
+    std::cout << "\r[";
+    int pos = barWidth * progress;
+    for (int i = 0; i < barWidth; ++i) {
+        if (i < pos) {
+            std::cout << "=";
+        } else if (i == pos) {
+            std::cout << ">";
+        } else {
+            std::cout << " ";
+        }
+    }
+    std::cout << "] " << int(progress * 100.0) << " %";
+    std::cout.flush();
+}
+
 int main(int argc, const char** argv) {
     if (argc != 6) {
         std::cout << "You should specify start size, end size, step size of matrix and output filename and use "
@@ -70,7 +87,17 @@ int main(int argc, const char** argv) {
     std::ostringstream output;
     output << "count,allocation_time,fill_time,calculation_time\n";
 
-    for (size_t N = std::atoi(argv[1]); N < std::atoi(argv[2]); N += std::atoi(argv[3])) {
+    size_t left = std::atoi(argv[1]), right = std::atoi(argv[2]), step = std::atoi(argv[3]);
+    size_t block_count = 0, current = 0;
+    double progress = 0;
+
+    for (size_t N = left; N <= right; N += step) {
+        block_count += N * N;
+    }
+
+    for (size_t N = left; N <= right; N += step) {
+        progress = static_cast<double>(current) / static_cast<double>(block_count);
+        printProgress(progress);
         auto start = std::chrono::system_clock::now();
         thrust::device_vector<float> A(N * N);
         thrust::device_vector<float> B(N * N);
@@ -98,7 +125,10 @@ int main(int argc, const char** argv) {
         elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
 
         output << elapsed << '\n';
+        current += N * N;
     }
+    printProgress(progress);
+    std::cout << std::endl;
     std::ofstream output_file(std::string(argv[4]) + ".csv");
     output_file << output.str();
 

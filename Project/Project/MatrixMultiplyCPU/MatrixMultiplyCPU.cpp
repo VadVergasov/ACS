@@ -8,7 +8,7 @@
 
 void multiplyOMP(const std::vector<std::vector<float>>& A, const std::vector<std::vector<float>>& B,
                  std::vector<std::vector<float>>& C) {
-#pragma omp parallel for
+#pragma omp parallel for num_threads(12)
     for (int i = 0; i < A.size(); i++) {
         for (int k = 0; k < B.size(); k++) {
             for (int j = 0; j < A.front().size(); j++) {
@@ -29,6 +29,23 @@ void multiply(const std::vector<std::vector<float>>& A, const std::vector<std::v
     }
 }
 
+void printProgress(double progress) {
+    static int barWidth = 70;
+    std::cout << "\r[";
+    int pos = barWidth * progress;
+    for (int i = 0; i < barWidth; ++i) {
+        if (i < pos) {
+            std::cout << "=";
+        } else if (i == pos) {
+            std::cout << ">";
+        } else {
+            std::cout << " ";
+        }
+    }
+    std::cout << "] " << int(progress * 100.0) << " %";
+    std::cout.flush();
+}
+
 int main(int argc, const char** argv) {
     if (argc != 6) {
         std::cout << "You should specify start size, end size, step size of matrix and output filename and use "
@@ -39,7 +56,17 @@ int main(int argc, const char** argv) {
     std::ostringstream output;
     output << "count,allocation_time,fill_time,calculation_time\n";
 
-    for (size_t N = std::atoi(argv[1]); N < std::atoi(argv[2]); N += std::atoi(argv[3])) {
+    size_t left = std::atoi(argv[1]), right = std::atoi(argv[2]), step = std::atoi(argv[3]);
+    size_t block_count = 0, current = 0;
+    double progress = 0;
+
+    for (size_t N = left; N <= right; N += step) {
+        block_count += N * N;
+    }
+
+    for (size_t N = left; N <= right; N += step) {
+        progress = static_cast<double>(current) / static_cast<double>(block_count);
+        printProgress(progress);
         std::mt19937 random(time(0));
         std::uniform_real_distribution<float> dist(1, 10);
         auto start_serial = std::chrono::high_resolution_clock::now();
@@ -74,7 +101,10 @@ int main(int argc, const char** argv) {
         elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end_serial - start_serial).count();
 
         output << elapsed << '\n';
+        current += N * N;
     }
+    printProgress(progress);
+    std::cout << std::endl;
     std::ofstream output_file(std::string(argv[4]) + ".csv");
     output_file << output.str();
     return 0;
