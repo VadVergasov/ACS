@@ -103,6 +103,7 @@ int main(int argc, const char** argv) {
         output << elapsed << '\n';
         current += N * N;
     }
+    progress = static_cast<double>(current) / static_cast<double>(block_count);
     printProgress(progress);
     std::cout << std::endl;
     std::ofstream output_file(std::string(argv[4]) + ".csv");

@@ -10,3 +10,4 @@ Release/
 *.pdb
 *.obj
 *.map
+.DS_Store
