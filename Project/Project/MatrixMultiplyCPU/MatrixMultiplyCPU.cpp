@@ -21,8 +21,8 @@ void multiplyOMP(const std::vector<std::vector<float>>& A, const std::vector<std
 void multiply(const std::vector<std::vector<float>>& A, const std::vector<std::vector<float>>& B,
               std::vector<std::vector<float>>& C) {
     for (int i = 0; i < A.size(); i++) {
-        for (int k = 0; k < B.size(); k++) {
-            for (int j = 0; j < A.front().size(); j++) {
+        for (int j = 0; j < A.front().size(); j++) {
+	    for (int k = 0; k < B.size(); k++) {
                 C[i][j] += A[i][k] * B[k][j];
             }
         }
